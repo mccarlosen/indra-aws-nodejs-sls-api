@@ -4,20 +4,26 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
-  #environment:
-  #  DB_HOST: 127.0.0.1
-  #  DB_PORT: 3306
-  #  DB_USER: root
-  #  DB_PASSWORD:
-  #  DB_NAME: mtb
 
 functions:
-  api:
+  getPeopleFromSwapi:
+    handler: index.getPeopleFromSwapi
+    events:
+      - httpApi:
+          path: /sw/personaje/{id}
+          method: GET
+  getBicycle:
     handler: index.getBicycle
     events:
       - httpApi:
-          path: /
-          method: get
+          path: /producto/{id}
+          method: GET
+  saveBicycle:
+    handler: index.saveBicycle
+    events:
+      - httpApi:
+          path: /producto
+          method: POST
 custom:
   serverlessPluginTypescript:
     tsConfigFileLocation: './tsconfig.json'
