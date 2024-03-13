@@ -1,0 +1,28 @@
+service: indra-aws-node-api-project
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  #environment:
+  #  DB_HOST: 127.0.0.1
+  #  DB_PORT: 3306
+  #  DB_USER: root
+  #  DB_PASSWORD:
+  #  DB_NAME: mtb
+
+functions:
+  api:
+    handler: index.getBicycle
+    events:
+      - httpApi:
+          path: /
+          method: get
+custom:
+  serverlessPluginTypescript:
+    tsConfigFileLocation: './tsconfig.json'
+plugins:
+  - serverless-plugin-typescript
+  - serverless-dotenv-plugin
+  - serverless-jest-plugin
+  - serverless-offline
