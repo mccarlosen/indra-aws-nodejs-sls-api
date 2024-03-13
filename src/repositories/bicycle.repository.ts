@@ -10,7 +10,7 @@ export class BicycleRepository implements BicycleRepositoryInterface {
     return bicycleEntity
   }
 
-  async find (id: number): Promise<BicycleInterface | null> {
+  async find (id: number | string): Promise<BicycleInterface | null> {
     const bicycleEntity = await this.bicycleModel.find(id)
     return bicycleEntity
   }
