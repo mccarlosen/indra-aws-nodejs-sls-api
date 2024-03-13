@@ -20,7 +20,7 @@ export class BicycleModel implements BicycleModelInterface {
     return result
   }
 
-  async find (id: number): Promise<BicycleInterface | null> {
+  async find (id: number | string): Promise<BicycleInterface | null> {
     const result = await this.dbService.executeQuery('SELECT * FROM bicycles WHERE id = ?', [id])
     const bicycle: BicycleInterface = {
       marca: result[0]?.marca,
