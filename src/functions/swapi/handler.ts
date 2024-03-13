@@ -1,11 +1,15 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda"
 import { useResponseJson } from '../../libs/use-response-json.lib'
 import axios from 'axios'
-import { useHeaderValidate } from "../../libs/use-headers.lib";
+import { useHeaderValidate } from "../../libs/use-headers.lib"
+import objectMapper from 'object-mapper'
+import bicycleMap from '../../mappers/bicycle.map'
+const querystring = require('querystring')
+require('dotenv').config()
 
 export const getPeopleFromSwapi = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const {body, headers} = event
-  const data = JSON.parse(body ?? '')
+  const {pathParameters, headers} = event
+  const data = pathParameters ?? ''
   const contentType = useHeaderValidate(headers, 'Content-Type')
 
   if (contentType !== 'application/json') {
@@ -20,6 +24,7 @@ export const getPeopleFromSwapi = async (event: APIGatewayProxyEvent): Promise<A
     return useResponseJson({ error: 'Bad Request.', message: 'Falta el parámetro ID en la solicitud.' }, 400)
   }
 
-  const response = await axios.get(`https://swapi.py4e.com/api/people/${data.id}/`);
-  return useResponseJson(response.data, 200)
+  const response = await axios.get(`${process.env.SWAPI_URL}/people/${data.id}/`)
+  const dataMap = objectMapper(response.data, bicycleMap)
+  return useResponseJson(dataMap, 200)
 }
