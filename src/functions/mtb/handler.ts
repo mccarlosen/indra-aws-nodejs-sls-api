@@ -48,8 +48,8 @@ export const saveBicycle = async (event: APIGatewayProxyEvent): Promise<APIGatew
 }
 
 export const getBicycle = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const {body, headers} = event
-  const data = JSON.parse(body ?? '')
+  const {pathParameters, headers} = event
+  const data = pathParameters ?? ''
   const contentType = useHeaderValidate(headers, 'Content-Type')
 
   if (contentType !== 'application/json') {
@@ -64,9 +64,11 @@ export const getBicycle = async (event: APIGatewayProxyEvent): Promise<APIGatewa
     return useResponseJson({ error: 'Bad Request.', message: 'Falta el parámetro ID en la solicitud.' }, 400)
   }
 
+  const resourceId = data.id ?? ''
+
   const bicycleModel = new BicycleModel(new DBService())
   const bicycleRepository = new BicycleRepository(bicycleModel)
-  const bicycleEntity = await bicycleRepository.find(data.id)
+  const bicycleEntity = await bicycleRepository.find(resourceId)
   
   return useResponseJson({data: bicycleEntity}, 200)
 }
