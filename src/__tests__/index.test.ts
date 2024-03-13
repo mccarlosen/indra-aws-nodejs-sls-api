@@ -12,7 +12,7 @@ describe('Prueba de SWAPI', () => {
     )
     const result = await getPeopleFromSwapi(event)
     expect(result).toBeDefined()
-    expect(result).toEqual({ statusCode: 400, body: '{"error":"Bad Request.","message":"El cuerpo de la solicitud está vacío."}' })
+    expect(result).toEqual({ statusCode: 400, body: '{"error":"Bad Request.","message":"Falta el parámetro ID en la solicitud."}' })
   })
 
   test('Debería mostrar el error Bad Request si no se envía el ID', async () => {
@@ -29,16 +29,17 @@ describe('Prueba de SWAPI', () => {
 
   test('La respuesta debería contener el nombre de Luke Skywalker si se envía el ID: 1', async () => {
     const event = useApiGatewayMock(
-      JSON.stringify({
-        id: 1
-      }),
+      JSON.stringify({}),
       {
         'content-type': 'application/json'
+      },
+      {
+        id: 1
       }
     )
     const result = await getPeopleFromSwapi(event)
     expect(result).toBeDefined()
-    const namePeople = JSON.parse(result.body).name
+    const namePeople = JSON.parse(result.body).nombre
     expect(namePeople).toEqual('Luke Skywalker')
   })
 })
@@ -67,11 +68,12 @@ describe('Prueba de endpoints para guardar y consultar entidad de producto', () 
 
   test('La respuesta debería contener la marca de bicicleta Giant si ID: 1', async () => {
     const event = useApiGatewayMock(
-      JSON.stringify({
-        id: 1
-      }),
+      JSON.stringify({}),
       {
         'content-type': 'application/json'
+      },
+      {
+        id: 1
       }
     )
     const result = await getBicycle(event)
