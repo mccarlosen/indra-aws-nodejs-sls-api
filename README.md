@@ -1,92 +1,92 @@
-<!--
-title: 'AWS Simple HTTP Endpoint example in NodeJS'
-description: 'This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.'
-layout: Doc
-framework: v3
-platform: AWS
-language: nodeJS
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# Reto técnico INDRA
 
-# Serverless Framework Node HTTP API on AWS
+## Descripción del reto técnico:
 
-This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.
+- Crear una API en Node.js con el framework Serverless para un despliegue en AWS.
+- Adaptar y transformar los modelos de la API de prueba. Se tienen que mapear todos los nombres de atributos modelos del inglés al español (Ej: name -> nombre).
+- Integrar la API de prueba StarWars API (líneas abajo está el link) se deben integrar uno o más endpoints.
+- Crear un modelo de su elección mediante el uso de un endpoint POST, la data se tendrá que almacenar dentro de una base de datos.
+- Crear un endpoint GET que muestre la data almacenada. 
 
-This template does not include any kind of persistence (database). For more advanced examples, check out the [serverless/examples repository](https://github.com/serverless/examples/) which includes Typescript, Mongo, DynamoDB and other examples.
+### Tecnologías Utilizadas
 
-## Usage
+- Backend: NodeJS Typescript
+- BD relacional: MySQL
+- Serverless framework
+- Test: Jest Typescript
 
-### Deployment
+## Uso
 
-```
-$ serverless deploy
-```
+Antes que nada clone el repositorio con `git clone` en su computadora o equipo de trabajo.
 
-After deploying, you should see output similar to:
+### Instalar nodejs y serverless framwork
 
-```bash
-Deploying aws-node-http-api-project to stage dev (us-east-1)
+- Instale nodejs de acuerdo a su sistema operaivo. [https://nodejs.org/en/download/current](https://nodejs.org/en/download/current)
+- Instale Serverless Framework en su sistema. `npm install -g serverless`
 
-✔ Service deployed to stack aws-node-http-api-project-dev (152s)
-
-endpoint: GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
-functions:
-  hello: aws-node-http-api-project-dev-hello (1.9 kB)
-```
-
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [http event docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway/).
-
-### Invocation
-
-After successful deployment, you can call the created application via HTTP:
+### Instalar dependencias
 
 ```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
+$ cd indra-aws-nodejs-sls-api
+$ yarn ó npm install
 ```
 
-Which should result in response similar to the following (removed `input` content for brevity):
+### Instalación de MySQL:
 
-```json
-{
-  "message": "Go Serverless v2.0! Your function executed successfully!",
-  "input": {
-    ...
-  }
-}
-```
+Este proyecto usa `mysql` como base de datos. Asegúrate de tenerlo instalado en su entorno de desarrollo. Esta aplicación se conectará usando los parámetros por defecto de `mysql`.
 
-### Local development
+#### Creación del archivo .env:
 
-You can invoke your function locally by using the following command:
+Debes crear en la raíz del proyecto un archivo llamado `.env` para la configuración de variables de entorno.
+
+#### Variables de entorno para a base de datos:
+
+Recuerde cambiar el valor de cada variable por el correspondiente a su entorno.
 
 ```bash
-serverless invoke local --function hello
+# .env
+DB_HOST=127.0.0.1
+DB_DATABASE=database_name
+DB_USER=root
+DB_PASSWORD=
+DB_PORT=3306
 ```
 
-Which should result in response similar to the following:
+#### Importación del script SQL:
 
-```
-{
-  "statusCode": 200,
-  "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": \"\"\n}"
-}
-```
+Por otro lado, se requiere importar la tabla utilizada para el reto llamada `bicycles` como ejemplo de las pruebas. Este archivo se encuentra en el directorio `sql` de este repositorio.
 
+### Integración con SWAPI:
 
-Alternatively, it is also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. In order to do that, execute the following command:
+Como parte de la prueba, se requiere integración con la API de [SWAPI](https://swapi.py4e.com/). Por lo que es necesario configurar la variable de entorno `SWAPI_URL` en el archivo `.env`.
 
 ```bash
-serverless plugin install -n serverless-offline
+# .env
+SWAPI_URL=https://swapi.py4e.com/api
 ```
 
-It will add the `serverless-offline` plugin to `devDependencies` in `package.json` file as well as will add it to `plugins` in `serverless.yml`.
+### Ejecutando la aplicación
 
-After installation, you can start local emulation with:
+Una vez instaladas todas las dependencias ejecute los siguientes comandos:
 
+#### Ejecute los test para validar que todo va como debe:
+
+```bash
+yarn run test
+# ó
+npm run test
 ```
-serverless offline
+
+#### Ejecute la aplicación localmente (modo offline):
+
+Esto levantará un servidor local que simulará en entorno de API Gateway Service.
+
+```bash
+sls offline
 ```
 
-To learn more about the capabilities of `serverless-offline`, please refer to its [GitHub repository](https://github.com/dherault/serverless-offline).
+#### Desplegar la aplicación en la nube:
+
+```bash
+yarn run deploy
+```
