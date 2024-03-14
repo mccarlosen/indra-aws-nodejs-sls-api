@@ -21,7 +21,7 @@ Antes que nada clone el repositorio con `git clone` en su computadora o equipo d
 
 ### Instalar nodejs y serverless framwork
 
-- Instale nodejs de acuerdo a su sistema operaivo. [https://nodejs.org/en/download/current](https://nodejs.org/en/download/current)
+- Instale nodejs de acuerdo a su sistema operaivo. La versión utilizada para esta prueba: 18.19.1. [https://nodejs.org/en/download/current](https://nodejs.org/en/download/current)
 - Instale Serverless Framework en su sistema. `npm install -g serverless`
 
 ### Instalar dependencias
